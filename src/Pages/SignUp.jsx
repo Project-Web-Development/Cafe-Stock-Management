@@ -1,30 +1,50 @@
-import React, { useState } from "react";
-import {
-  Card,
-  Input,
-  Button,
-  Typography,
-} from "@material-tailwind/react";
-
+import React, { useState, useEffect } from "react";
+import { Card, Input, Button, Typography } from "@material-tailwind/react";
+import { useAuth } from "../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 export default function SignUpForm() {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-      });
+  const { isAuthenticated ,login, signUp } = useAuth();
+  const navigate = useNavigate();
+  
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-      const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-      };
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate("/Home");
+    }
+  }, [isAuthenticated, navigate]);
+  
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-      const handleSubmit = () => {
-        // Kirim data formData ke komponen atau fungsi lain di sini
-        // Contoh: sendDataToAuthentication(formData);
-      };
+  const handleSubmit = async () => {
+    try {
+      // Lakukan logika pendaftaran pengguna di sini menggunakan fungsi signUp dari AuthContext
+      // Ganti data yang diperlukan dengan formData yang ada
+      const userEmail = await signUp(
+        formData.email,
+        formData.password,
+        formData
+      );
+      if (userEmail) {
+        // Jika pendaftaran berhasil, panggil fungsi login untuk menyetel pengguna
+        login(userEmail);
+        navigate("/Home");
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      // Tindakan penanganan kesalahan jika perlu
+    }
+  };
 
   return (
-    <div className="flex justify-center" >
+    <div className="flex justify-center">
       <Card color="transparent" shadow={false} className="mx-auto mt-11">
         <Typography variant="h4" color="blue-gray">
           Sign Up
@@ -78,13 +98,13 @@ export default function SignUpForm() {
               onChange={handleChange}
             />
           </div>
-          
+
           <Button className="mt-6" fullWidth onClick={handleSubmit}>
             sign up
           </Button>
           <Typography color="gray" className="mt-4 text-center font-normal">
             Already have an account?{" "}
-            <a href="signIn" className="font-medium text-gray-900">
+            <a href="/" className="font-medium text-gray-900">
               Sign In
             </a>
           </Typography>

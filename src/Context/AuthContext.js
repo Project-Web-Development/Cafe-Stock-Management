@@ -1,50 +1,48 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { onAuthStateChanged, signOut } from 'firebase/auth'; // Import fungsi onAuthStateChanged dan signOut dari Firebase Auth
-import { auth } from '../Configs/firebaseConfig'; // Sesuaikan dengan konfigurasi Firebase Anda
-// import { db } from '../Configs/firebaseConfig';
-// import { createUserWithEmailAndPassword } from 'firebase/auth';
-// import { addDoc, collection } from 'firebase/firestore';
+import { createContext, useContext, useState, useEffect } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth"; // Import fungsi onAuthStateChanged dan signOut dari Firebase Auth
+import { auth } from "../Configs/firebaseConfig"; // Sesuaikan dengan konfigurasi Firebase Anda
+import { db } from "../Configs/firebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { addDoc, collection } from "firebase/firestore";
 const AuthContext = createContext();
 
 export const useAuth = () => {
   return useContext(AuthContext);
 };
-
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true); // Menambahkan state loading
 
-//   const signUp = async (email, password, formData) => {
+  const signUp = async (email, password, formData) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
-//     try {
-//       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  
-//       // Dapatkan email pengguna
-//       const userName = formData.displayName;
-//       console.log('UserName', userName)
-//       // Setel status login di konteks autentikasi dengan data pengguna baru
-//       login(userCredential.user);
-  
-//       // Simpan data pengguna ke Firestore dengan nama dokumen yang sesuai dengan alamat email pengguna
-//       await addDoc(collection(db, 'Users', userName), {
-//           email : userEmail,
-//           displayName: formData.displayName,
-//           birthPlace: formData.birthPlace,
-//           numberPhone: formData.numberPhone,
-//           role: 'users', // Anda dapat mengatur role sesuai kebutuhan
-//       });
-  
-//       return userEmail; // Kembalikan alamat email pengguna jika pendaftaran berhasil
-//     } catch (error) {
-//       console.error('Error during registration:', error);
-//       throw error; // Lebih baik melempar error jika terjadi kesalahan saat pendaftaran
-//     }
-//   };
-  
+      // Dapatkan email pengguna
+
+      // Setel status login di konteks autentikasi dengan data pengguna baru
+      login(userCredential.user);
+
+      // Simpan data pengguna ke Firestore dengan nama dokumen yang sesuai dengan alamat email pengguna
+      await addDoc(collection(db, "Users"), {
+        email: email,
+        DisplayName: formData.name,
+      });
+
+      return email; // Kembalikan alamat email pengguna jika pendaftaran berhasil
+    } catch (error) {
+      console.error("Error during registration:", error);
+      throw error; // Lebih baik melempar error jika terjadi kesalahan saat pendaftaran
+    }
+  };
+
   // Fungsi untuk login dipanggil di login.jsx
-  
+
   const login = (userData) => {
-    setUser(userData);
+    setUser({ ...userData, email: userData.email }); // Menambahkan email ke dalam data pengguna
   };
 
   // Fungsi untuk logout
@@ -53,7 +51,7 @@ export function AuthProvider({ children }) {
       await signOut(auth); // Logout dari Firebase
       setUser(null); // Hapus data pengguna dari konteks autentikasi
     } catch (error) {
-      console.error('Error during logout:', error);
+      console.error("Error during logout:", error);
     }
   };
 
@@ -84,6 +82,7 @@ export function AuthProvider({ children }) {
     login,
     logout,
     isAuthenticated,
+    signUp,
   };
 
   // Tampilkan loading jika masih dalam proses memeriksa status login
@@ -92,8 +91,6 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 }

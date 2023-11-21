@@ -1,19 +1,44 @@
-import React from "react";
+import React, { useState, useEffect, useCallback  } from "react";
 import NavbarDefault from "../Components/NavigationBar";
-import Footer from "../Components/Footer"
+import Footer from "../Components/Footer";
 import { useAuth } from "../Context/AuthContext";
-function Home(){
+import { Navigate } from "react-router-dom";
+import { getUserDataByEmail } from "../Context/firebaseController";
+
+function Home() {
     const { isAuthenticated, user } = useAuth();
-    if(isAuthenticated){
-        return(
-            <div className="mx-7">
-                <NavbarDefault/>
-                <main>
-                    <h1>Home</h1>
-                </main>
-                <Footer/>
-            </div>
-        );
+    const [userData, setUserData] = useState(null);
+    const getUserData = useCallback(async () => {
+      try {
+        if (isAuthenticated && user && user.email) {
+          const userData = await getUserDataByEmail(user.email);
+          setUserData(userData);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }, [isAuthenticated, user]);
+  
+    useEffect(() => {
+      getUserData(); // Memanggil fungsi getUserData saat komponen dimuat
+    }, [getUserData]); // Menambahkan getUserData sebagai dependensi untuk menghilangkan peringatan
+    
+    if (!isAuthenticated) {
+      return <Navigate to="/" />;
     }
-}
-export default Home;
+  
+    return (
+      <div>
+        <NavbarDefault />
+        {userData && (
+          <div>
+            <p>Hai,  {userData.displayName}</p>
+
+          </div>
+        )}
+        <Footer />
+      </div>
+    );
+  }
+  
+  export default Home;
