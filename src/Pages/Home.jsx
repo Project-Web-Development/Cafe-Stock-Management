@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback  } from "react";
+import React, { useState, useCallback  } from "react";
 import NavbarDefault from "../Components/NavigationBar";
 import Footer from "../Components/Footer";
 import { useAuth } from "../Context/AuthContext";
@@ -19,9 +19,11 @@ function Home() {
       }
     }, [isAuthenticated, user]);
   
-    useEffect(() => {
-      getUserData(); // Memanggil fungsi getUserData saat komponen dimuat
-    }, [getUserData]); // Menambahkan getUserData sebagai dependensi untuk menghilangkan peringatan
+    function callbck(callback) {
+      callback(); 
+    }
+    
+    callbck(getUserData);
     
     if (!isAuthenticated) {
       return <Navigate to="/" />;
