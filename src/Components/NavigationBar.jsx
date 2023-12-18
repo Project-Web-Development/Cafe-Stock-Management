@@ -7,7 +7,7 @@ import {
   Collapse,
 } from "@material-tailwind/react";
 import { useAuth } from "../Context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../Assets/Images/logo packDesign.png";
 
 export default function NavbarDefault() {
@@ -41,9 +41,9 @@ export default function NavbarDefault() {
           />
         </svg>
 
-        <a href="/Home" className="flex items-center">
+        <Link to="/Home" className="flex items-center">
           Home
-        </a>
+        </Link>
       </Typography>
       <Typography
         as="li"
@@ -65,9 +65,9 @@ export default function NavbarDefault() {
             fill="#90A4AE"
           />
         </svg>
-        <a href="/SignIn" className="flex items-center">
-          Sign In
-        </a>
+        <Link to="/Stock" className="flex items-center">
+          Stock
+        </Link>
       </Typography>
       <Typography
         as="li"
@@ -87,9 +87,9 @@ export default function NavbarDefault() {
             fill="#90A4AE"
           />
         </svg>
-        <a href="/blocks" className="flex items-center">
-          Blocks
-        </a>
+        <Link to="/blocks" className="flex items-center">
+          recipe
+        </Link>
       </Typography>
       <Typography
         as="li"
@@ -111,9 +111,9 @@ export default function NavbarDefault() {
             fill="#90A4AE"
           />
         </svg>
-        <a href="/Docs" className="flex items-center">
-          Docs
-        </a>
+        <Link to="/Docs" className="flex items-center">
+          Profile
+        </Link>
       </Typography>
     </ul>
   );
