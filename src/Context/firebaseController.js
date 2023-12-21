@@ -28,3 +28,34 @@ export const getUserDataByEmail = async (email) => {
       throw error;
     }
   };
+
+  export async function getStockDataByEmail(email) {
+    try {
+      const stockRef = collection(db, 'Stock');
+      const queryGetStockByEmail = query(stockRef, where("Email", "==", email)); // Pastikan "Email" sesuai dengan field yang ada di Firestore
+  
+      const snapshot = await getDocs(queryGetStockByEmail);
+      const stockData = [];
+  
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const stockItem = {
+          id: doc.id,
+          stockName: data.StockName,
+          category: data.Category,
+          quantity: data.Quantity,
+          unit: data.Unit,
+          insideQuantityPerUnit: data.InsideQuantityPerUnit,
+          insideUnit: data.InsideUnit,
+          
+        };
+        stockData.push(stockItem);
+      });
+      console.log(stockData);
+      return stockData;
+    } catch (error) {
+      console.error('Error fetching stock data:', error);
+      throw error;
+    }
+  }
+  
