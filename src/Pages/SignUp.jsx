@@ -11,6 +11,30 @@ export default function SignUpForm() {
   const navigate = useNavigate();
   const [erorAuth, setErorAuth] = useState(false);
 
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth',
+    });
+  };
+
+  useEffect(() => {
+    // Add scroll event listener to hide/show scroll button based on scroll position
+    const scrollButton = document.getElementById('scrollButton');
+    const handleScroll = () => {
+      if (scrollButton) {
+        const isScrolled = window.scrollY > 0;
+        scrollButton.style.display = isScrolled ? 'none' : 'block';
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -54,13 +78,22 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className="flex justify-between bg-gradient-to-b from-[#3F4E4F] to-[#2C3639]">
-      <div className="w-1/2 flex items-center justify-center h-screen">
-        <h1 className="text-6xl font-bold text-[#DCD7C9] ms-10">
-          Manage and Control Your Cafe Stock
+    <div className="flex flex-col md:flex-row items-center bg-gradient-to-b from-[#3F4E4F] to-[#2C3639]">
+    <div className="w-full flex h-screen items-center justify-center">
+    <h1 className="md:text-6xl text-4xl text-center font-bold text-[#DCD7C9]">
+      Manage and Control Your Cafe Stock
         </h1>
-      </div>
-      <div className="w-1/2 flex items-center justify-center">
+      <div className="md:hidden block">
+        <Button
+          id="scrollButton"
+          className=" bg-blue-500 text-white px-6 py-3 rounded-full transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 mt-4"
+          onClick={scrollToBottom}
+        >
+          Scroll to Bottom
+        </Button>
+        </div>
+    </div>
+    <div className="w-1/2 flex items-center justify-center">
         <div className="flex justify-center ps-5 pe-5 pb-5 rounded-3xl shadow-2xl bg-[#DCD7C9]">
         <Stack sx={{ width: "100%", position: "relative" }}>
           <Card color="transparent" shadow={false} className="mx-auto mt-11">
