@@ -1,5 +1,5 @@
 import { db } from "../Configs/firebaseConfig";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 export const getUserDataByEmail = async (email) => {
     try {
       const usersCollection = collection(db, "Users"); // Mengakses koleksi "Users" di Firestore
@@ -55,6 +55,17 @@ export const getUserDataByEmail = async (email) => {
       return stockData;
     } catch (error) {
       console.error('Error fetching stock data:', error);
+      throw error;
+    }
+  }
+
+  export default async function addNewStock(stockData) {
+    try {
+      const stockRef = collection(db, "Stock"); // Referensi koleksi "Stock" di Firestore
+      await addDoc(stockRef, stockData); // Menambahkan dokumen baru ke koleksi "Stock"
+      console.log("Data stock berhasil ditambahkan ke Firebase!");
+    } catch (error) {
+      console.error("Error adding stock data:", error);
       throw error;
     }
   }

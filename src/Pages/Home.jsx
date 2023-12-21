@@ -1,9 +1,5 @@
 import React from "react";
 import NavbarDefault from "../Components/NavigationBar";
-import Footer from "../Components/Footer";
-// import { useAuth } from "../Context/AuthContext";
-// import { Navigate } from "react-router-dom";
-// import { getUserDataByEmail } from "../Context/firebaseController";
 import { useUserData } from '../Context/getUserData';
 import { Navigate } from "react-router-dom";
 
@@ -14,7 +10,7 @@ function Home() {
   }
   
     return (
-      <div className="bg-gradient-to-b from-[#3F4E4F] to-[#2C3639] h-screen pt-2">
+      <div className="bg-gradient-to-b from-[#3F4E4F] to-[#2C3639] h-screen pt-5">
         <NavbarDefault />
         {userData && (
           <div>

@@ -81,7 +81,7 @@ export default function ReactVirtualizedTable() {
   const [rows, setRows] = useState([]);
 
   return (
-    <Paper style={{ height: 400, width: '80%' }}>
+    <Paper style={{ height: 400, width: '78.5%' }}>
       <Table>
         <TableHead>
           <TableRow>
