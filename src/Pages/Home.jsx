@@ -1,36 +1,20 @@
-import React, { useState, useCallback  } from "react";
+import React from "react";
 import NavbarDefault from "../Components/NavigationBar";
 import Footer from "../Components/Footer";
-import { useAuth } from "../Context/AuthContext";
+// import { useAuth } from "../Context/AuthContext";
+// import { Navigate } from "react-router-dom";
+// import { getUserDataByEmail } from "../Context/firebaseController";
+import { useUserData } from '../Context/getUserData';
 import { Navigate } from "react-router-dom";
-import { getUserDataByEmail } from "../Context/firebaseController";
 
 function Home() {
-    const { isAuthenticated, user } = useAuth();
-    const [userData, setUserData] = useState(null);
-    const getUserData = useCallback(async () => {
-      try {
-        if (isAuthenticated && user && user.email) {
-          const userData = await getUserDataByEmail(user.email);
-          setUserData(userData);
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    }, [isAuthenticated, user]);
-  
-    function callbck(callback) {
-      callback(); 
-    }
-    
-    callbck(getUserData);
-    
-    if (!isAuthenticated) {
-      return <Navigate to="/" />;
-    }
+  const userData = useUserData();
+  if(!useUserData){
+    return <Navigate to="/" />
+  }
   
     return (
-      <div>
+      <div className="bg-gradient-to-b from-[#3F4E4F] to-[#2C3639] h-screen pt-2">
         <NavbarDefault />
         {userData && (
           <div>
@@ -38,7 +22,6 @@ function Home() {
 
           </div>
         )}
-        <Footer />
       </div>
     );
   }

@@ -1,132 +1,105 @@
-import * as React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { TableVirtuoso } from "react-virtuoso";
-
-const sample = [
-  ["Frozen yoghurt", 159, 6.0, 24, 4.0, 312],
-  ["Ice cream sandwich", 237, 9.0, 37, 4.3, 312],
-  ["Eclair", 262, 16.0, 24, 6.0, 2312],
-  ["Cupcake", 305, 3.7, 67, 4.3, 212],
-  ["Gingerbread", 356, 16.0, 49, 3.9, 100],
-  ["Matcha", 123, 12.0, 54, 23, 25],
-];
-
-function createData(id, dessert, calories, fat, carbs, protein, quantity) {
-  return { id, dessert, calories, fat, carbs, protein, quantity };
-}
+import React, { useEffect, useState } from 'react';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { useUserData } from '../Context/getUserData';
+import { getStockDataByEmail } from '../Context/firebaseController';
 
 const columns = [
   {
     width: 200,
-    label: "Dessert",
-    dataKey: "dessert",
+    label: 'Stock Name',
+    dataKey: 'stockname',
   },
   {
     width: 120,
-    label: "Calories\u00A0(g)",
-    dataKey: "calories",
-    numeric: true,
+    label: 'Category',
+    dataKey: 'category',
   },
   {
     width: 120,
-    label: "Fat\u00A0(g)",
-    dataKey: "fat",
-    numeric: true,
+    label: 'Quantity',
+    dataKey: 'quantity',
   },
   {
     width: 120,
-    label: "Carbs\u00A0(g)",
-    dataKey: "carbs",
-    numeric: true,
+    label: 'Unit',
+    dataKey: 'unit',
   },
   {
     width: 120,
-    label: "Protein\u00A0(g)",
-    dataKey: "protein",
-    numeric: true,
+    label: 'Inside Quantity Per Unit',
+    dataKey: 'insideQuantityPerUnit',
   },
   {
     width: 120,
-    label: "Quantity\u00A0(g)",
-    dataKey: "quantity",
-    numeric: true,
+    label: 'Inside Unit',
+    dataKey: 'insideunit',
   },
 ];
 
-const rows = Array.from({ length: 200 }, (_, index) => {
-  const randomSelection = sample[Math.floor(Math.random() * sample.length)];
-  return createData(index, ...randomSelection);
-});
-
-const VirtuosoTableComponents = {
-  Scroller: React.forwardRef((props, ref) => (
-    <TableContainer component={Paper} {...props} ref={ref} />
-  )),
-  Table: (props) => (
-    <Table
-      {...props}
-      sx={{ borderCollapse: "separate", tableLayout: "fixed" }}
-    />
-  ),
-  TableHead,
-  TableRow: ({ item: _item, ...props }) => <TableRow {...props} />,
-  TableBody: React.forwardRef((props, ref) => (
-    <TableBody {...props} ref={ref} />
-  )),
-};
-
-function fixedHeaderContent() {
-  return (
-    <TableRow>
-      {columns.map((column) => (
-        <TableCell
-          key={column.dataKey}
-          variant="head"
-          align={column.numeric || false ? "right" : "left"}
-          style={{ width: column.width }}
-          sx={{
-            backgroundColor: "background.paper",
-          }}
-        >
-          {column.label}
-        </TableCell>
-      ))}
-    </TableRow>
-  );
-}
-
-function rowContent(_index, row) {
-  return (
-    <React.Fragment>
-      {columns.map((column) => (
-        <TableCell
-          key={column.dataKey}
-          align={column.numeric || false ? "right" : "left"}
-          //   style={{ color:'white'}}
-        >
-          {row[column.dataKey]}
-        </TableCell>
-      ))}
-    </React.Fragment>
-  );
-}
-
 export default function ReactVirtualizedTable() {
+  const userData = useUserData();
+  const [stockData, setStockData] = useState([]);
+
+  useEffect(() => {
+    async function fetchStockData() {
+      if (userData && userData.email) {
+        try {
+          const data = await getStockDataByEmail(userData.email);
+          setStockData(data);
+        } catch (error) {
+          console.error('Error fetching stock data:', error);
+        }
+      }
+    }
+
+    fetchStockData();
+  }, [userData]);
+
+  function createData(stock) {
+    return {
+      id: stock.id,
+      stockname: stock.stockName, // Ubah dari 'stock['Stock Name']' ke 'stock.stockName'
+      category: stock.category,
+      quantity: stock.quantity,
+      unit: stock.unit,
+      insideQuantityPerUnit: stock.insideQuantityPerUnit,
+      insideunit: stock.insideUnit,
+    };
+  }
+
+  // Ubah efek useEffect untuk memperbarui rows saat stockData berubah
+  useEffect(() => {
+    const updatedRows = stockData.map((stock, index) => createData(stock));
+    setRows(updatedRows);
+  }, [stockData]);
+
+  const [rows, setRows] = useState([]);
+
   return (
-    <Paper style={{ height: 400, width: "80%" }}>
-      <TableVirtuoso
-        data={rows}
-        components={VirtuosoTableComponents}
-        fixedHeaderContent={fixedHeaderContent}
-        itemContent={rowContent}
-        // style={{background:'black'}}
-      />
+    <Paper style={{ height: 400, width: '80%' }}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            {columns.map((column) => (
+              <TableCell key={column.dataKey}>{column.label}</TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row, index) => (
+            <TableRow key={index}>
+              {columns.map((column) => (
+                <TableCell key={column.dataKey}>{row[column.dataKey]}</TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </Paper>
   );
 }
