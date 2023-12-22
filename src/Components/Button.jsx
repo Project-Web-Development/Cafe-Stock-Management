@@ -8,5 +8,5 @@ export default function Button({href}){
         to = {href}>
             Add New Stock   
         </Link>
-    );
+    );  
 }

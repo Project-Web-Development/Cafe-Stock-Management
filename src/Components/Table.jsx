@@ -23,16 +23,19 @@ const columns = [
     width: 120,
     label: 'Quantity',
     dataKey: 'quantity',
+    numeric: true,
   },
   {
     width: 120,
     label: 'Unit',
     dataKey: 'unit',
+
   },
   {
     width: 120,
     label: 'Inside Quantity Per Unit',
     dataKey: 'insideQuantityPerUnit',
+    numeric: true,
   },
   {
     width: 120,
@@ -86,13 +89,13 @@ export default function ReactVirtualizedTable() {
         <TableHead>
           <TableRow>
             {columns.map((column) => (
-              <TableCell key={column.dataKey}>{column.label}</TableCell>
+              <TableCell key={column.dataKey} >{column.label}</TableCell>
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody >
           {rows.map((row, index) => (
-            <TableRow key={index}>
+            <TableRow key={index} >
               {columns.map((column) => (
                 <TableCell key={column.dataKey}>{row[column.dataKey]}</TableCell>
               ))}
