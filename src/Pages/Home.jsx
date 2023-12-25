@@ -1,6 +1,5 @@
 import React from "react";
 import NavbarDefault from "../Components/NavigationBar";
-import Footer from "../Components/Footer";
 // import { useAuth } from "../Context/AuthContext";
 // import { Navigate } from "react-router-dom";
 // import { getUserDataByEmail } from "../Context/firebaseController";

@@ -87,7 +87,7 @@ export default function NavbarDefault() {
             fill="#ffffff"
           />
         </svg>
-        <Link to="/blocks" className="flex items-center text-[#ffffff]">
+        <Link to="/recipe" className="flex items-center text-[#ffffff]">
           recipe
         </Link>
       </Typography>

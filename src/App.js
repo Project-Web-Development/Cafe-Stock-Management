@@ -5,6 +5,7 @@ import SignUp from './Pages/SignUp'
 import Home from "./Pages/Home";
 import StockPage  from "./Pages/Stock";
 import AddNewStock from "./Pages/AddNewStock";
+import RecipePage from "./Pages/Recipe";
 function App() {
   return (
     <Router>
@@ -14,6 +15,8 @@ function App() {
         <Route path="/Home" element={<Home />} />
         <Route path="/Stock" element={<StockPage />} />
         <Route path="/addnewstock" element={<AddNewStock />} />
+        <Route path="/recipe" element={<RecipePage />} />
+        
       </Routes>
     </Router>
   );
