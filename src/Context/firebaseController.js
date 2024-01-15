@@ -1,72 +1,129 @@
 import { db } from "../Configs/firebaseConfig";
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  updateDoc,
+  doc,
+  getDoc,
+  deleteDoc
+} from "firebase/firestore";
 export const getUserDataByEmail = async (email) => {
-    try {
-      const usersCollection = collection(db, "Users"); // Mengakses koleksi "Users" di Firestore
-      const q = query(usersCollection, where("email", "==", email)); // Membuat query dengan filter email
-  
-      const querySnapshot = await getDocs(q); // Melakukan query ke Firestore
-  
-      let userData = null;
-  
-      querySnapshot.forEach((doc) => {
-        // Jika ditemukan dokumen dengan email yang sesuai
-        if (doc.exists()) {
-          // Mengambil data dari dokumen
-          userData = {
-            id: doc.id,
-            email: doc.data().email,
-            displayName: doc.data().DisplayName,
-            domisili: doc.data().Domisili,
-          };
-        }
-      });
-  
-      return userData; // Mengembalikan data pengguna atau null jika tidak ditemukan
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      throw error;
-    }
-  };
+  try {
+    const usersCollection = collection(db, "Users"); // Mengakses koleksi "Users" di Firestore
+    const q = query(usersCollection, where("email", "==", email)); // Membuat query dengan filter email
 
-  export async function getStockDataByEmail(email) {
-    try {
-      const stockRef = collection(db, 'Stock');
-      const queryGetStockByEmail = query(stockRef, where("Email", "==", email)); // Pastikan "Email" sesuai dengan field yang ada di Firestore
-  
-      const snapshot = await getDocs(queryGetStockByEmail);
-      const stockData = [];
-  
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        const stockItem = {
+    const querySnapshot = await getDocs(q); // Melakukan query ke Firestore
+
+    let userData = null;
+
+    querySnapshot.forEach((doc) => {
+      // Jika ditemukan dokumen dengan email yang sesuai
+      if (doc.exists()) {
+        // Mengambil data dari dokumen
+        userData = {
           id: doc.id,
-          stockName: data.StockName,
-          category: data.Category,
-          quantity: data.Quantity,
-          unit: data.Unit,
-          insideQuantityPerUnit: data.InsideQuantityPerUnit,
-          insideUnit: data.InsideUnit,
-          
+          email: doc.data().email,
+          displayName: doc.data().DisplayName,
+          domisili: doc.data().Domisili,
         };
-        stockData.push(stockItem);
-      });
-      console.log(stockData);
-      return stockData;
-    } catch (error) {
-      console.error('Error fetching stock data:', error);
-      throw error;
-    }
-  }
+      }
+    });
 
-  export default async function addNewStock(stockData) {
-    try {
-      const stockRef = collection(db, "Stock"); // Referensi koleksi "Stock" di Firestore
-      await addDoc(stockRef, stockData); // Menambahkan dokumen baru ke koleksi "Stock"
-      console.log("Data stock berhasil ditambahkan ke Firebase!");
-    } catch (error) {
-      console.error("Error adding stock data:", error);
-      throw error;
-    }
+    return userData; // Mengembalikan data pengguna atau null jika tidak ditemukan
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error;
   }
-  
+};
+
+export async function getStockDataByEmail(email) {
+  try {
+    const stockRef = collection(db, "Stock");
+    const queryGetStockByEmail = query(stockRef, where("Email", "==", email)); // Pastikan "Email" sesuai dengan field yang ada di Firestore
+
+    const snapshot = await getDocs(queryGetStockByEmail);
+    const stockData = [];
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const stockItem = {
+        id: doc.id,
+        stockName: data.StockName,
+        category: data.Category,
+        quantity: data.Quantity,
+        unit: data.Unit,
+        insideQuantityPerUnit: data.InsideQuantityPerUnit,
+        insideUnit: data.InsideUnit,
+      };
+      stockData.push(stockItem);
+    });
+    console.log(stockData);
+    return stockData;
+  } catch (error) {
+    console.error("Error fetching stock data:", error);
+    throw error;
+  }
+}
+
+export default async function addNewStock(stockData) {
+  try {
+    const stockRef = collection(db, "Stock"); // Referensi koleksi "Stock" di Firestore
+    await addDoc(stockRef, stockData); // Menambahkan dokumen baru ke koleksi "Stock"
+    console.log("Data stock berhasil ditambahkan ke Firebase!");
+  } catch (error) {
+    console.error("Error adding stock data:", error);
+    throw error;
+  }
+}
+
+export async function updateStockData(stockId, updatedStockData) {
+  try {
+    const stockRef = doc(db, "Stock", stockId);
+    await updateDoc(stockRef, updatedStockData);
+    console.log("Stock data updated successfully!");
+  } catch (error) {
+    console.error("Error updating stock data:", error);
+    throw error;
+  }
+}
+
+export async function getStockById(stockId) {
+  try {
+    const stockRef = doc(db, 'Stock', stockId);
+    const stockDoc = await getDoc(stockRef);
+
+    if (stockDoc.exists()) {
+      const stockData = stockDoc.data();
+      return {
+        id: stockDoc.id,
+        stockName: stockData.StockName,
+        category: stockData.Category,
+        quantity: stockData.Quantity,
+        unit: stockData.Unit,
+        insideQuantityPerUnit: stockData.InsideQuantityPerUnit,
+        insideUnit: stockData.InsideUnit,
+        maximumStock: stockData.MaximumStock,
+        minimumStock : stockData.MinimumStock,
+        isInsideQuantityNeeded:stockData.IsInsideQuantityNeeded
+      };
+    } else {
+      console.error(`Stock with ID ${stockId} not found`);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching stock data by ID:', error);
+    throw error;
+  }
+}
+
+export const deleteStock = async (id) => {
+  try {
+    const stockRef = doc(db, "Stock", id);
+    await deleteDoc(stockRef);
+  } catch (error) {
+    throw new Error("Error deleting stock data:", error);
+  }
+};
