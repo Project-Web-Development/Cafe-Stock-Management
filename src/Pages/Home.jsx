@@ -1,5 +1,8 @@
 import React from "react";
 import NavbarDefault from "../Components/NavigationBar";
+// import { useAuth } from "../Context/AuthContext";
+// import { Navigate } from "react-router-dom";
+// import { getUserDataByEmail } from "../Context/firebaseController";
 import { useUserData } from '../Context/getUserData';
 import { Navigate } from "react-router-dom";
 
