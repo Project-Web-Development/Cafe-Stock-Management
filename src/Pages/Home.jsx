@@ -13,7 +13,7 @@ function Home() {
   }
   
     return (
-      <div className="bg-gradient-to-b from-[#3F4E4F] to-[#2C3639] h-screen pt-2">
+      <div className="bg-gradient-to-b from-[#3F4E4F] to-[#2C3639] h-screen pt-5">
         <NavbarDefault />
         {userData && (
           <div>
