@@ -127,3 +127,40 @@ export const deleteStock = async (id) => {
     throw new Error("Error deleting stock data:", error);
   }
 };
+
+export const GetMenuByEmail = async (email) => {
+  try {
+    const menuRef = collection(db, "Menu");
+    const queryGetMenuByEmail = query(menuRef, where("email", "==", email));
+
+    const snapshot = await getDocs(queryGetMenuByEmail);
+    const menuData = [];
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const menuItem = {
+        id: doc.id,
+        name: data.namaMenu,
+        category: data.category,
+        sold: data.sold,
+        link: data.link,
+        typeMenu: data.typeMenu
+      };
+      
+      // Periksa jenis menu dan tentukan di mana menu tersebut harus ditempatkan
+      if (menuItem.typeMenu === "Main") {
+        // Main Recipe
+        menuData.push(menuItem);
+      } else if (menuItem.typeMenu === "Sub") {
+        
+        menuData.push(menuItem);
+      }
+    });
+
+    return menuData;
+  } catch (error) {
+    console.error("Error fetching menu data:", error);
+    throw error;
+  }
+};
+
