@@ -10,7 +10,7 @@ function RecipePage() {
   const [desserts, setDesserts] = useState([]);
   const [subMakanans, setSubMakanans] = useState([]);
   const [subMinumans, setSubMinumans] = useState([]);
-  const [menuData, setMenuData] = useState(null); // State untuk menyimpan data menu
+  const [menuData, setMenuData] = useState(null);
 
   console.log("Foods State:", foods);
   console.log("Desserts State:", desserts);
@@ -148,27 +148,26 @@ function RecipePage() {
           {/* Bagian kanan dengan card menggunakan display flex dan flex-wrap */}
           <div className="flex flex-wrap px-60 pt-5">
             {foods.map((foodItem) => (
-              <div
-                key={foodItem.id}
-                className="bg-gradient-to-b from-[#343434] to-[#000000] flex flex-col items-center justify-center p-4 rounded shadow-xl mr-4 mb-4 w-64"
-              >
-                {/* Gambar di atas, dan elemen teks di bawah */}
-                <div className=" flex flex-col items-center">
-                  <img
-                    src={foodItem.link}
-                    alt={foodItem.name}
-                    className="border-b-4 border-indigo-500 shadow-lg w-32 h-32 object-fill rounded-lg mb-4"
-                  />
-                  <div className=" bg-cover size-30 text-center">
-                    <h2 className=" text-white text-xl font-bold">
-                      {foodItem.name}
-                    </h2>
-                    <p className="text-white text-lg ">
-                      {foodItem.quantity} /Day
-                    </p>
-                  </div>
-                </div>
-              </div>
+               <div
+               key={foodItem.id}
+               className="bg-gradient-to-b from-[#343434] to-[#212121] flex flex-col items-center justify-center pb-5 rounded-3xl shadow-xl mr-4 mb-4 w-[200px] h-[245px]"
+             >
+               <div className="flex flex-col">
+                 <img
+                   src={foodItem.link}
+                   alt={foodItem.name}
+                   className="border-b-[8px] border-indigo-500 shadow-lg w-56 object-cover rounded-3xl mb-2 h-[150px]"
+                 />
+                 <div className="bg-cover size-30 text-center">
+                   <h2 className="text-white text-md mb-4">
+                     {foodItem.name}
+                   </h2>
+                   <p className="text-white text-lg font-extrabold">
+                     {foodItem.sold} / Day
+                   </p>
+                 </div>
+               </div>
+             </div>
             ))}
           </div>
 
@@ -181,20 +180,20 @@ function RecipePage() {
             {desserts.map((dessertItem) => (
               <div
                 key={dessertItem.id}
-                className="bg-gradient-to-b from-[#343434] to-[#000000] flex flex-col items-center justify-center p-4 rounded shadow-xl mr-4 mb-4 w-64"
+                className="bg-gradient-to-b from-[#343434] to-[#212121] flex flex-col items-center justify-center pb-5 rounded-3xl shadow-xl mr-4 mb-4 w-[200px] h-[245px]"
               >
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col">
                   <img
                     src={dessertItem.link}
                     alt={dessertItem.name}
-                    className="border-b-4 border-indigo-500 shadow-lg w-32 h-32 object-cover rounded-lg mb-4"
+                    className="border-b-[8px] border-indigo-500 shadow-lg w-56 object-cover rounded-3xl mb-2 h-[150px]"
                   />
                   <div className="bg-cover size-30 text-center">
-                    <h2 className="text-white text-xl font-bold">
+                    <h2 className="text-white text-md mb-4">
                       {dessertItem.name}
                     </h2>
-                    <p className="text-white text-lg">
-                      {dessertItem.quantity} /Day
+                    <p className="text-white text-lg font-extrabold">
+                      {dessertItem.sold} / Day
                     </p>
                   </div>
                 </div>
@@ -216,24 +215,25 @@ function RecipePage() {
             {/* Tampilkan daftar sub recipe (snack atau cake) di sini */}
             {subMakanans.map((subMakananItem) => (
               <div
-                key={subMakananItem.id}
-                className="bg-gradient-to-b from-[#343434] to-[#000000] flex flex-col items-center justify-center p-4 rounded shadow-xl mr-4 mb-4 w-64"
-              >
-                {/* Gambar di atas, dan elemen teks di bawah */}
-                <div className=" flex flex-col items-center">
-                  <img
-                    src={subMakananItem.link}
-                    alt={subMakananItem.name}
-                    className="border-b-4 border-indigo-500 shadow-lg w-32 h-32 object-fill rounded-lg mb-4"
-                  />
-                  <h2 className="text-white text-xl font-bold">
+              key={subMakananItem.id}
+              className="bg-gradient-to-b from-[#343434] to-[#212121] flex flex-col items-center justify-center pb-5 rounded-3xl shadow-xl mr-4 mb-4 w-[200px] h-[245px]"
+            >
+              <div className="flex flex-col">
+                <img
+                  src={subMakananItem.link}
+                  alt={subMakananItem.name}
+                  className="border-b-[8px] border-indigo-500 shadow-lg w-56 object-cover rounded-3xl mb-2 h-[150px]"
+                />
+                <div className="bg-cover size-30 text-center">
+                  <h2 className="text-white text-md mb-4">
                     {subMakananItem.name}
                   </h2>
-                  <p className="text-white text-lg">
-                    {subMakananItem.quantity} /Day
+                  <p className="text-white text-lg font-extrabold">
+                    {subMakananItem.sold} / Day
                   </p>
                 </div>
               </div>
+            </div>
             ))}
           </div>
 
@@ -245,24 +245,26 @@ function RecipePage() {
             {/* Tampilkan daftar sub recipe (snack atau cake) di sini */}
             {subMinumans.map((subMinumanItem) => (
               <div
-                key={subMinumanItem.id}
-                className="bg-gradient-to-b from-[#343434] to-[#000000] flex flex-col items-center justify-center p-4 rounded shadow-xl mr-4 mb-4 w-64"
-              >
-                {/* Gambar di atas, dan elemen teks di bawah */}
-                <div className=" flex flex-col items-center">
-                  <img
-                    src={subMinumanItem.link}
-                    alt={subMinumanItem.name}
-                    className="border-b-4 border-indigo-500 shadow-lg w-32 h-32 object-fill rounded-lg mb-4"
-                  />
-                  <h2 className="text-white text-xl font-bold">
+              key={subMinumanItem.id}
+              className="bg-gradient-to-b from-[#343434] to-[#212121] flex flex-col items-center justify-center pb-5 rounded-3xl shadow-xl mr-4 mb-4 w-[200px] h-[245px]"
+            >
+              <div className="flex flex-col">
+                <img
+                  src={subMinumanItem.link}
+                  alt={subMinumanItem.name}
+                  className="border-b-[8px] border-indigo-500 shadow-lg w-56 object-cover rounded-3xl mb-2 h-[150px]"
+                />
+                <div className="bg-cover size-30 text-center">
+                  <h2 className="text-white text-md mb-4">
                     {subMinumanItem.name}
                   </h2>
-                  <p className="text-white text-lg">
-                    {subMinumanItem.quantity} /Day
+                  <p className="text-white text-lg font-extrabold">
+                    {subMinumanItem.sold} / Day
                   </p>
                 </div>
               </div>
+            </div>
+          
             ))}
           </div>
         </div>
