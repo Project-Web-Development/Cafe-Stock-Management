@@ -11,7 +11,6 @@ function Home() {
   if(!useUserData){
     return <Navigate to="/" />
   }
-  
     return (
       <div className="bg-gradient-to-b from-[#3F4E4F] to-[#2C3639] h-screen pt-5">
         <NavbarDefault />

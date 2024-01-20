@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavbarDefault from "../Components/NavigationBar";
 import { useUserData } from "../Context/getUserData";
 import { GetMenuByEmail } from "../Context/firebaseController";
+import { useNavigate } from "react-router-dom";
 
 function RecipePage() {
   const [mode, setMode] = useState("Main");
@@ -11,7 +12,10 @@ function RecipePage() {
   const [subMakanans, setSubMakanans] = useState([]);
   const [subMinumans, setSubMinumans] = useState([]);
   const [menuData, setMenuData] = useState(null);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const navigate = useNavigate()
 
+  console.log(selectedRecipe);
   console.log("Foods State:", foods);
   console.log("Desserts State:", desserts);
   console.log("Sub Makanans State:", subMakanans);
@@ -105,6 +109,13 @@ function RecipePage() {
   const handleMainRecipeClick = () => {
     setMode("Main");
   };
+  const handleButtonAddNewRecipe = () => {
+    navigate("/formAddNewrecipe");
+  };
+  const handleToInfoRecipe = (recipe) => {
+    setSelectedRecipe(recipe.id);
+    navigate(`/infoRecipe/${recipe.id}`);
+  };
 
   return (
     <div className="bg-gradient-to-b from-[#3F4E4F] to-[#2C3639] h-screen pt-2 flex flex-col">
@@ -140,17 +151,18 @@ function RecipePage() {
         <div>
           <div className="flex items-center justify-around px-60">
             <h1 className="text-3xl font-bold text-white">Makanan</h1>
-            <button className="bg-brown-500 bg-sky-500/50 text-white font-bold py-2 px-4 rounded-full ml-auto">
+            <button className="bg-brown-500 bg-sky-500/50 text-white font-bold py-2 px-4 rounded-full ml-auto" onClick={handleButtonAddNewRecipe}>
               Add New Receipt
             </button>
           </div>
 
           {/* Bagian kanan dengan card menggunakan display flex dan flex-wrap */}
-          <div className="flex flex-wrap px-60 pt-5">
+          <div className="flex flex-wrap px-60 pt-5" >
             {foods.map((foodItem) => (
                <div
                key={foodItem.id}
-               className="bg-gradient-to-b from-[#343434] to-[#212121] flex flex-col items-center justify-center pb-5 rounded-3xl shadow-xl mr-4 mb-4 w-[200px] h-[245px]"
+               className="bg-gradient-to-b from-[#343434] to-[#212121] flex flex-col items-center justify-center pb-5 rounded-3xl shadow-xl mr-4 mb-4 w-[200px] h-[245px] cursor-pointer"
+               onClick={() => handleToInfoRecipe(foodItem)}
              >
                <div className="flex flex-col">
                  <img
@@ -207,8 +219,8 @@ function RecipePage() {
         <div>
           <div className="flex items-center justify-around px-60">
             <h1 className="text-3xl font-bold text-white">Sub Recipe</h1>
-            <button className="bg-brown-500 bg-sky-500/50 text-white font-bold py-2 px-4 rounded-full ml-auto">
-              Add New Sub Recipe
+            <button className="bg-brown-500 bg-sky-500/50 text-white font-bold py-2 px-4 rounded-full ml-auto" onClick={handleButtonAddNewRecipe}>
+              Add New Recipe
             </button>
           </div>
           <div className="flex flex-wrap px-60 pt-5">
@@ -217,6 +229,7 @@ function RecipePage() {
               <div
               key={subMakananItem.id}
               className="bg-gradient-to-b from-[#343434] to-[#212121] flex flex-col items-center justify-center pb-5 rounded-3xl shadow-xl mr-4 mb-4 w-[200px] h-[245px]"
+              onClick={() => handleToInfoRecipe(subMakananItem)}
             >
               <div className="flex flex-col">
                 <img

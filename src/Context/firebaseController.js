@@ -10,6 +10,26 @@ import {
   getDoc,
   deleteDoc
 } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { storage } from '../Configs/firebaseConfig';
+
+export const uploadImageToStorage = async (file) => {
+  try {
+    // Mendapatkan referensi ke Firebase Storage, sesuaikan dengan path yang sesuai
+    const storageRef = ref(storage, `images/${file.name}`);
+
+    // Mengunggah gambar ke Firebase Storage
+    const snapshot = await uploadBytesResumable(storageRef, file);
+
+    // Mendapatkan URL gambar setelah berhasil diunggah
+    const downloadURL = await getDownloadURL(snapshot.ref);
+
+    return downloadURL;
+  } catch (error) {
+    console.error('Error uploading image to Firebase Storage:', error);
+    throw error;
+  }
+};
 export const getUserDataByEmail = async (email) => {
   try {
     const usersCollection = collection(db, "Users"); // Mengakses koleksi "Users" di Firestore
@@ -64,6 +84,18 @@ export async function getStockDataByEmail(email) {
     return stockData;
   } catch (error) {
     console.error("Error fetching stock data:", error);
+    throw error;
+  }
+}
+
+
+export async function addNewRecipe(recipeData) {
+  try {
+    const recipesRef = collection(db, "Menu"); // Ganti "Recipes" dengan nama koleksi yang sesuai di Firestore
+    await addDoc(recipesRef, recipeData); // Menambahkan dokumen baru ke koleksi "Recipes"
+    console.log("Data resep berhasil ditambahkan ke Firebase!");
+  } catch (error) {
+    console.error("Error adding recipe data:", error);
     throw error;
   }
 }
@@ -163,4 +195,32 @@ export const GetMenuByEmail = async (email) => {
     throw error;
   }
 };
+
+export async function getMenuById(menuId) {
+  try {
+    const menuRef = doc(db, 'Menu', menuId);
+    const menuDoc = await getDoc(menuRef);
+
+    if (menuDoc.exists()) {
+      const menuData = menuDoc.data();
+      return {
+        id: menuDoc.id,
+        name: menuData.namaMenu,
+        category: menuData.category,
+        sold: menuData.sold,
+        link: menuData.link,
+        typeMenu: menuData.typeMenu,
+        ingredients: menuData.ingredients || []
+        // Tambahkan properti lain sesuai kebutuhan
+      };
+    } else {
+      console.error(`Menu with ID ${menuId} not found`);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching menu data by ID:', error);
+    throw error;
+  }
+}
+
 
