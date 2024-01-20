@@ -7,6 +7,8 @@ import StockPage  from "./Pages/Stock";
 import AddNewStock from "./Pages/AddNewStock";
 import EditStock from "./Pages/EditStock";
 import RecipePage from "./Pages/Recipe";
+import FormAddNewRecipe from "./Pages/FormAddNewRecipe";
+import InfoRecipe from "./Pages/InfoRecipe";
 function App() {
   return (
     <Router>
@@ -18,9 +20,10 @@ function App() {
         <Route path="/addnewstock" element={<AddNewStock />} />
         <Route path="/editstock/:id" element={<EditStock />} />
         <Route path="/recipe" element={<RecipePage />} />
+        <Route path="/formAddNewrecipe" element={<FormAddNewRecipe />} />
+        <Route path="/infoRecipe/:id" element={<InfoRecipe />} />
       </Routes>
     </Router>
   );
 }
-
 export default App;
