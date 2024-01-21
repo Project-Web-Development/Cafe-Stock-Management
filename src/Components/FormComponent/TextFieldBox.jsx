@@ -14,7 +14,7 @@ const TextFieldBox = ({ label, value, onChange, type, width, disabled }) => {
       noValidate
       autoComplete="off"
     >
-      <div className="">
+      <div className="m-1 mt-2">
         <TextField
           required
           id="outlined-required"

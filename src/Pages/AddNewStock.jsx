@@ -144,13 +144,7 @@ export default function AddNewStock() {
           <CustomRadioGroup value={category} onChange={handleCategoryChange} />
           <div className="flex justify-center">
             {/* Quantity */}
-            <TextFieldBox
-              label="Quantity"
-              value={quantity}
-              onChange={handleQuantityChange}
-              type="number"
-              width="150px"
-            />
+            <TextFieldBox label="Quantity" value={quantity} onChange={handleQuantityChange} type="number"  width="150px"/>
             {/* Unit */}
             <SelectBox
               label="Unit"
