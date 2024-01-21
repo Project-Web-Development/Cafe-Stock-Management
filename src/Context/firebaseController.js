@@ -222,5 +222,18 @@ export async function getMenuById(menuId) {
     throw error;
   }
 }
+export async function updateMenuSold(menuId, newSoldValue) {
+  try {
+    const menuRef = doc(db, "Menu", menuId);
+    await updateDoc(menuRef, {
+      sold: newSoldValue,
+    });
+    console.log("Menu data updated successfully!");
+  } catch (error) {
+    console.error("Error updating menu data:", error);
+    throw error;
+  }
+}
+
 
 
