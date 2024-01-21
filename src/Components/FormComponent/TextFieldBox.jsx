@@ -4,11 +4,12 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
 const TextFieldBox = ({ label, value, onChange, type, width, disabled }) => {
+  
   return (
     <Box
       component="form"
       sx={{
-        "& .MuiTextField-root": { m: 1, width: width },
+        "& .MuiTextField-root": { width: width },
       }}
       noValidate
       autoComplete="off"
@@ -19,10 +20,11 @@ const TextFieldBox = ({ label, value, onChange, type, width, disabled }) => {
           id="outlined-required"
           label={label}
           value={value}
-          style={{ color: "white" }}
           onChange={onChange}
           type={type}
           disabled={disabled}
+          InputLabelProps={{ shrink: true }}
+          
         />
       </div>
     </Box>

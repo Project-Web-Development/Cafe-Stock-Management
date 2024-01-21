@@ -1,0 +1,29 @@
+CardFlipper.css
+.card {
+    perspective: 1000px;
+  }
+  
+  .front,
+  .back {
+    position: static;
+    backface-visibility: hidden;
+    transition: transform 1s;
+  }
+  .card.flip {
+    z-index: 2; /* Atur nilai z-index yang lebih tinggi ketika kartu sedang dibalik */
+}
+  
+  .back {
+    /* Sesuaikan dengan ukuran dan posisi yang Anda inginkan */
+    transform: rotateY(180deg);
+  }
+  
+  .card.flip .front {
+    transform: rotateY(180deg);
+  }
+  
+  .card.flip .back {
+    transform: rotateY(360deg);
+  }
+  
+  
