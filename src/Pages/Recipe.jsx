@@ -682,5 +682,4 @@ function RecipePage() {
     </div>
   );
 }
-
 export default RecipePage;
