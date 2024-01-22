@@ -5,6 +5,7 @@ import TextFieldBox from "../Components/FormComponent/TextFieldBox";
 import { useUserData } from "../Context/getUserData";
 import { GetMenuByEmail, updateMenuSold } from "../Context/firebaseController";
 import { useNavigate } from "react-router-dom";
+import InfoRecipe from "./InfoRecipe";
 import "./Recipe.css";
 
 function RecipePage() {
@@ -16,6 +17,7 @@ function RecipePage() {
   const [subMinumans, setSubMinumans] = useState([]);
   const [menuData, setMenuData] = useState(null);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [popUp, setPopUp] = useState(false);
   const [soldTextField, setSoldTextField] = useState(
     Array(foods.length).fill("")
   );
@@ -157,8 +159,10 @@ function RecipePage() {
     navigate("/formAddNewrecipe");
   };
   const handleToInfoRecipe = (recipe) => {
-    setSelectedRecipe(recipe.id);
-    navigate(`/infoRecipe/${recipe.id}`);
+    
+    setSelectedRecipe(recipe);
+    console.log("Selecteeeed :" + selectedRecipe);
+    setPopUp(true);
   };
   const handleUpdateButton = async (foodItemId, index) => {
     try {
@@ -272,6 +276,7 @@ function RecipePage() {
     <div className="bg-gradient-to-b from-[#3F4E4F] to-[#2C3639] h-full pt-2 flex flex-col">
       <NavbarDefault />
 
+      {popUp ? (<InfoRecipe idRecipe={selectedRecipe} setPopup={setPopUp} />) : null}
       <div className="flex pt-10 px-60">
         {/* Bagian kiri dengan tombol dan judul */}
         <div className="mr-4">
@@ -343,7 +348,7 @@ function RecipePage() {
                           Flip
                         </button>
                         <button
-                          onClick={() => handleToInfoRecipe(foodItem)}
+                          onClick={() => handleToInfoRecipe(foodItem.id)}
                           className="flip-button bg-blue-gray-500 w-20 h-10 rounded-sm"
                         >
                           Info
